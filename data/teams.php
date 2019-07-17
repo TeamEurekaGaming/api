@@ -8,7 +8,7 @@ class Team{
     // object properties
     public $id;
     public $kleding;
-    public $klasse;
+    public $comp;
     public $naam;
  
     // constructor with $db as database connection
@@ -20,9 +20,9 @@ class Team{
     function read(){
      
         // select all query
-        $query = "SELECT id, idKleding, idKlasse, naam
+        $query = "SELECT id, idKleding, idComp, naam
                     FROM " . $this->table_name . "
-                    ORDER BY idKlasse DESC";
+                    ORDER BY idComp DESC";
      
         // prepare query statement
         $stmt = $this->conn->prepare($query);
@@ -40,19 +40,19 @@ class Team{
         $query = "INSERT INTO
                     " . $this->table_name . "
                 SET
-                    idKleding=:kleding, idKlasse=:klasse, naam=:naam";
+                    idKleding=:kleding, idComp=:comp, naam=:naam";
      
         // prepare query
         $stmt = $this->conn->prepare($query);
      
         // sanitize
         $this->kleding=htmlspecialchars(strip_tags($this->kleding));
-        $this->klasse=htmlspecialchars(strip_tags($this->klasse));
+        $this->comp=htmlspecialchars(strip_tags($this->comp));
         $this->naam=htmlspecialchars(strip_tags($this->naam));
      
         // bind values
         $stmt->bindParam(":kleding", $this->kleding);
-        $stmt->bindParam(":klasse", $this->klasse);
+        $stmt->bindParam(":comp", $this->comp);
         $stmt->bindParam(":naam", $this->naam);
      
         // execute query

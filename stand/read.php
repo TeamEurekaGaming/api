@@ -5,44 +5,49 @@ header("Content-Type: application/json; charset=UTF-8");
  
 // include database and object files
 include_once '../config/database.php';
-include_once '../data/teams.php';
+include_once '../data/standen.php';
  
 // instantiate database and product object
 $database = new Database();
 $db = $database->getConnection();
  
 // initialize object
-$team = new Team($db);
+$stand = new Stand($db);
  
 // query products
-$stmt = $team->read();
+$stmt = $stand->read();
 $num = $stmt->rowCount();
  
 // check if more than 0 record found
 if($num>0){
  
     // products array
-    $teams = array();
-    $teams["records"] = array();
+    $standen = array();
+    $standen["records"] = array();
  
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         extract($row);
- 
-        $team_gegevens = array(
+        $stand_gegevens = array(
             "id" => $id,
-            "kleding" => $idKleding,
-            "competitie" => $idComp,
-            "naam" => $naam
+            "naam" => $naam,
+            "gewonnen" => $gewonnen,
+            "gelijk" => $gelijk,
+            "verloren" => $verloren,
+            "dpv" => $dpv,
+            "dpt" => $dpt,
+            "pnt" => (($gewonnen * 3) + $gelijk),
+            "saldo" => ($dpv - $dpt),
+            "gespeeld" => ($gewonnen + $gelijk + $verloren)
         );
  
-        array_push($teams["records"], $team_gegevens);
+        array_push($standen["records"], $stand_gegevens);
     }
  
     // set response code - 200 OK
     http_response_code(200);
  
     // show products data in json format
-    echo json_encode($teams);
+    echo json_encode($standen);
 }
  
 else{
@@ -52,9 +57,8 @@ else{
  
     // tell the user no products found
     echo json_encode(
-        array("message" => "Geen teams gevonden.")
+        array("message" => "Geen standen gevonden.")
     );
 }
-
 
 ?>
