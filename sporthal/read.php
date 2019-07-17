@@ -12,7 +12,7 @@ $database = new Database();
 $db = $database->getConnection();
  
 // initialize object
-$team = new Sporthal($db);
+$sporthal = new Sporthal($db);
  
 // query products
 $stmt = $sporthal->read();
@@ -29,10 +29,11 @@ if($num>0){
         extract($row);
  
         $hal_gegevens = array(
-            "id" => $id,
-            "kleding" => $idKleding,
-            "klasse" => $idKlasse,
-            "naam" => $naam
+            "naam" => $naam,
+            "adres" => $adres,
+            "postcode" => $postcode,
+            "woonplaats" => $woonplaats,
+            "telefoon" => $telefoon
         );
  
         array_push($sporthallen["records"], $hal_gegevens);
